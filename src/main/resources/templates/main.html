@@ -31,16 +31,19 @@
 <table border=2>
     <tr th:each="a : ${alist}">
         <td th:text="${a.apiId}"</td>
-        <td><button type="submit"  th:text="${a.apiName}" onclick="location.href=''" id="num" > </button></td>
+        <td><button type="submit"   th:text="${a.apiName}" <a th:onclick="|javascript:page([[${a.apiId}]])|"></a> </button></td>
     </tr>
 </table>
 </ul>
 
 
-<h3></h3>
 
-<script>
+<script type="text/javascript">
+    function page(idx) {
 
+            location.href= "http://localhost:8080/api1.html";
+
+    }
 </script>
 
 </body>

@@ -9,23 +9,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/main")
 public class mainController {
 
     @Autowired
     private ApiServiceImpl apiService;
 
-    @GetMapping (value="/main")
-    public String getapiList(Model model){
+    @RequestMapping("")
+    public String getApiList(Model model){
 
         model.addAttribute("alist",apiService.findApiList());
 
         return "main";
 
+    }
+
+    @GetMapping (value="/api1")
+    public String getParamList(Model model) {
+
+        model.addAttribute("plist",apiService.findParamList());
+
+        return "api1";
     }
 
 

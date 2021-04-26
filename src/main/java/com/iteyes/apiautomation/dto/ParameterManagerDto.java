@@ -1,5 +1,6 @@
 package com.iteyes.apiautomation.dto;
 
+import com.iteyes.apiautomation.store.entity.ApiManager;
 import com.iteyes.apiautomation.store.entity.ParameterManager;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +17,15 @@ public class ParameterManagerDto {
     private String paramterDes;
     private String paramterType;
     private String valueDes;
+
+    public ParameterManagerDto(ParameterManager parameterManager) {
+        this.apiId =getApiId();
+        this.parameterName=getParameterName();
+        this.paramterDes=getParamterDes();
+        this.paramterType=getParamterType();
+        this.valueDes=getValueDes();
+
+    }
 
     @Builder
     private ParameterManager toEntity(){
