@@ -1,4 +1,4 @@
-//package com.iteyes.apiautomation.store;
+//package com.iteyes.apiautomation.store.repository;
 //
 //import com.iteyes.apiautomation.store.entity.ParameterManger;
 //import org.springframework.data.jpa.repository.JpaRepository;

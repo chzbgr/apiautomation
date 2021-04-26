@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface ApiService {
 
-    List<ApiManagerDTO> findAllApiList();
+    List<ApiManagerDTO> getApiList();
 }

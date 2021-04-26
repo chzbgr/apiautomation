@@ -1,6 +1,6 @@
 //package com.iteyes.apiautomation.store.jpa;
 //
-//import com.iteyes.apiautomation.store.ParameterManagerRepository;
+//import com.iteyes.apiautomation.store.repository.ApiManagerRepository.ParameterManagerRepository;
 //import com.iteyes.apiautomation.store.entity.ParameterManger;
 //import org.springframework.data.domain.Example;
 //import org.springframework.data.domain.Page;
