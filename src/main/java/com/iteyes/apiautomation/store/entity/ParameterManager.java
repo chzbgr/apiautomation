@@ -1,6 +1,7 @@
 package com.iteyes.apiautomation.store.entity;
 
 
+import com.iteyes.apiautomation.store.entity.key.ParameterEntityKey;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,12 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name="PARAMETER_MANAGER",schema = "API_TEST_DB")
+
+@IdClass(ParameterEntityKey.class)
+
 public class ParameterManager {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="API_ID")
     private String apiId;
 
+    @Id
     @Column(name="PARAMETER_NAME")
     private String parameterName;
 

@@ -14,16 +14,16 @@
         <th>API_번호</th>
         <th>변수명</th>
         <th>타입</th>
-        <th>섦명</th>
+        <th>설명</th>
         <th>값_설명</th>
         <th>값을 입력하세요</th>
         </tr>
         <tr th:each="p, iter: ${plist}">
-            <td th:text="${p.ApiId}"></td>
-            <td th:text="${p.ParameterName}"></td>
-            <td th:text="${p.ParameterType}"></td>
-            <td th:text="${p.ParameterDes}"></td>
-            <td th:text="${p.ValueDes}"></td>
+            <td th:text="${p.apiId}"></td>
+            <td th:text="${p.parameterName}"></td>
+            <td th:text="${p.parameterType}"></td>
+            <td th:text="${p.parameterDes}"></td>
+            <td th:text="${p.valueDes}"></td>
             <td><input th:id="${iter.index}"type="text" ></td>
         </tr>
     </table>

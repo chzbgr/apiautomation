@@ -28,6 +28,9 @@ public class mainRepoImpl implements  mainRepo{
 
     @Override
     public List<ParameterManagerDto> findAllParamList(){
-        return parameterManagerRepository.findAll().stream().map(ParameterManagerDto::new).collect(Collectors.toList());
+        List<ParameterManagerDto> parameterManagerDtoList = parameterManagerRepository.findAllByApiId("api1").stream().map(ParameterManagerDto::new).collect(Collectors.toList());
+        System.out.println("=============JPA===============");
+        System.out.println(parameterManagerDtoList.toString());
+        return parameterManagerDtoList;
     }
 }
