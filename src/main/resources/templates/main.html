@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type="text/javascript" src="../../assets/js/jquery-3.4.1.js"></script>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        ul.a {
+            background: lightskyblue;
+            list-style-type: square;
+            list-style-position: inside;
+            padding: 10px 10px 10px 50px;
+        }
+
+        li {
+            background: #f1f1f1;
+            padding: 10px 10px 10px 20px;
+            margin: 10px 10px 10px 10px;
+        }
+
+        h1.title {
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+
+<body>
+<h1 class="title">iteyes API 자동화 시스템</h1>
+<table border=2>
+    <tr th:each="a : ${alist}">
+        <td th:text="${a.apiId}"</td>
+        <td><button type="submit"  th:text="${a.apiName}" onclick="location.href=''" id="num" > </button></td>
+    </tr>
+</table>
+</ul>
+
+
+<h3></h3>
+
+<script>
+
+</script>
+
+</body>
+</html>
