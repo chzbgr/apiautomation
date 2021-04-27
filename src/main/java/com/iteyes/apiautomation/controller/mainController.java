@@ -1,6 +1,5 @@
 package com.iteyes.apiautomation.controller;
 
-import com.iteyes.apiautomation.dto.ParamCreateDto;
 import com.iteyes.apiautomation.dto.ParameterManagerDto;
 import com.iteyes.apiautomation.service.logic.ApiServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,21 +41,22 @@ public class mainController {
     }
 
 
-    @RequestMapping(value="/main/api/callApi",method=RequestMethod.POST)
-    public String callApi(Model model, ParamCreateDto dto) {
+    @PostMapping("/main/api1")
+    public String callApi(Model model,
+                          @RequestParam(value="keyArr") List<String> keyArr,
+                          @RequestParam(value="valueArr") List<String> valueArr) {
+
+        System.out.println(keyArr.toString());
+        System.out.println(valueArr.toString());
+
         Map<String, String> map = new HashMap<>();
 
-        String[] key_arr = dto.getKeyArr().split(",");
-        String[] val_arr = dto.getValArr().split(",");
-
-        for (int i = 0; i < key_arr.length; i++) {
-            map.put(key_arr[i], val_arr[i]);
+        for(int i = 0; i < keyArr.size(); i++) {
+            map.put(keyArr.get(i), keyArr.get(i));
         }
 
-        System.out.println(map);
         model.addAttribute("preview",map);
-        //mainService.getDataList(dto.getApiId(), map);
-        return "api1";
+        return "preview";
     }
 }
 

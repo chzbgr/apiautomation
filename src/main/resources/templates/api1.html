@@ -8,71 +8,46 @@
 </head>
 
 <body>
-    <h2><보건복지부_코로나19 감염_현황</h2>
 
-    <form action="/main/api1" method="post">
-        <table id="paramTable" border=2>
-            <thead>
-            <th>API_번호</th>
-            <th>변수명</th>
-            <th>타입</th>
-            <th>설명</th>
-            <th>값_설명</th>
-            <th>값을 입력하세요</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="p : ${plist}">
-                <td th:text="${p.apiId}"></td>
-                <td th:text="${p.parameterName}"></td>
-                <td th:text="${p.parameterType}"></td>
-                <td th:text="${p.parameterDes}"></td>
-                <td th:text="${p.valueDes}"></td>
-                <td><label>
-                    <input th:id="${p.parameterName}" type="text"/>
-                </label></td>
-            </tr>
-            </tbody>
-        </table>
+<h2> 보건복지부_코로나19 감염_현황 </h2>
 
-    <!--<button type="submit">요청</button>-->
-          <div>  <button type="button" th:onclick="setParams();">요청</button> </div>
-    </form>
-    <script type="text/javascript">
-        function setParams() {
-            var keyArr = [];
-            var valArr = [];
-            var apiId = $("#apiId").val();
+<form action="/main/api1" method="post">
+    <div>
+    <table id="paramTable" border=2>
+        <thead>
+        <th>API_번호</th>
+        <th>변수명</th>
+        <th>타입</th>
+        <th>설명</th>
+        <th>값_설명</th>
+        <th>값을 입력하세요</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="params : ${plist}">
+            <input type="hidden" name="keyArr" th:value="${params.parameterName}"/>
+            <td th:text="${params.apiId}"></td>
+            <td th:text="${params.parameterName}"></td>
+            <td th:text="${params.parameterDes}"></td>
+            <td th:text="${params.parameterType}"></td>
+            <td th:text="${params.valueDes}"></td>
+            <td><label>
+                <input type="text" name="valueArr"/>
+            </label></td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+    <div>
+        <!--<button type="button" onclick="setParams();">요청</button>-->
+        <button type="submit" value="submit">요청</button>
+    </div>
+</form>
 
-            $("#paramTable tbody tr").each(function (index, el) {
-                var key = $(el).find('td:first').text();
-                var value = $(el).find('input').val();
 
-                console.log(key);
-                keyArr.push(key);
-                valArr.push(value);
-            });
-            callPublicApi(apiId, keyArr, valArr);
-        }
 
-        function callPublicApi(apiId, keyArr, valArr) {
-            $.ajax({
-                url: "main/api1/callApi",
-                dataType: "json",
-                data: {
-                    apiId: apiId,
-                    keyArr: keyArr,
-                    valArr: valArr
-                },
-                traditional: true,
-                type: "POST",
-                success: function () {
-                    var option = "width = 500, height = 500";
-                    window.open("/api/preview", "출력결과 미리보기", option);
-                }
-            })
-        }
-        </script>
-    </body>
+
+</body>
+
+
 </html>
-

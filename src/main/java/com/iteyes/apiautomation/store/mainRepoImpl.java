@@ -1,8 +1,10 @@
 package com.iteyes.apiautomation.store;
 
 import com.iteyes.apiautomation.dto.ApiManagerDto;
+import com.iteyes.apiautomation.dto.BogunCountDto;
 import com.iteyes.apiautomation.dto.ParameterManagerDto;
 import com.iteyes.apiautomation.store.repo.ApiManagerRepository;
+import com.iteyes.apiautomation.store.repo.BogunRepository;
 import com.iteyes.apiautomation.store.repo.ParameterManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -29,8 +31,12 @@ public class mainRepoImpl implements  mainRepo{
     @Override
     public List<ParameterManagerDto> findAllParamList(){
         List<ParameterManagerDto> parameterManagerDtoList = parameterManagerRepository.findAllByApiId("api1").stream().map(ParameterManagerDto::new).collect(Collectors.toList());
-        System.out.println("=============JPA===============");
-        System.out.println(parameterManagerDtoList.toString());
+
         return parameterManagerDtoList;
+    }
+
+    @Override
+    public List<BogunCountDto> previewParameter() {
+
     }
 }
