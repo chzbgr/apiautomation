@@ -8,6 +8,5 @@ import java.util.List;
 public interface ApiStore {
 
     List<ApiManagerDTO> findAllApiList();
-//    List<ParameterManagerDTO> findAllParameterList();
-
+    List<ParameterManagerDTO> findAllParameterList(String apiID);
 }

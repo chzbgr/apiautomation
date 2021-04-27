@@ -1,18 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <title>Api 목록</title>
+    <style>
+        table {
+            width: 30%;
+            border: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #444444;
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Api 목록</h1>
+    <h3>Api를 선택해주세요</h3>
     <table>
         <tr>
             <th>Api 명</th>
         </tr>
-<!--        <tr th:each="apiList: ${apiList}">-->
-<!--            <td><a th:text="${apiList.apiName}"></a></td>-->
-<!--        </tr>-->
+        <tr th:each="apiList: ${apiList}">
+            <td><a th:text="${apiList.apiName}" th:onclick="selectApi([[${apiList.apiId}]])"></a></td>
+        </tr>
     </table>
 </body>
+<script type="text/javascript" src="../../assets/js/jquery-3.4.1.js"></script>
+<script>
+    function selectApi(apiId) {
+        location.href="apiRequest?apiId="+apiId;
+    }
+</script>
 </html>

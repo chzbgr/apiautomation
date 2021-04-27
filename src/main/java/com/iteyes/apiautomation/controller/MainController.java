@@ -14,9 +14,13 @@ import java.util.List;
 @Log4j2
 public class MainController {
 
-
     @Autowired
     private ApiService apiService;
+
+    public MainController(ApiService apiService) {
+        this.apiService = apiService;
+    }
+
 
 //    @Autowired
 //    private ApiManagerRepository apiManagerRepository;

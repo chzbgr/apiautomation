@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Api 요청</title>
+    <style>
+        table {
+            width: 70%;
+            border: 1px solid #444444;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #444444;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<h2>요청변수 입력</h2>
+<form th:action="@{/parameterRequest}" method="post">
+    <table>
+    <tr>
+        <th>변수명</th>
+        <th>옵션</th>
+        <th>항목 설명</th>
+        <th>값 입력</th>
+    </tr>
+    <tr th:each="parameterList: ${parameterList}">
+        <td th:text="${parameterList.parameterDes}"></td>
+        <td th:text="${parameterList.parameterType}"></td>
+        <td th:text="${parameterList.valueDes}"></td>
+        <td><input type="text" class="form-control" th:name="parameterList.parameterName"></td>
+    </tr>
+    </table>
+    <button type="submit">요청</button>
+</form>
+</body>
+</html>
