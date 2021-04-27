@@ -1,15 +1,18 @@
 package com.iteyes.apiautomation.service;
 
 import com.iteyes.apiautomation.dto.ApiManagerDto;
+
 import com.iteyes.apiautomation.dto.ParameterManagerDto;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("ApiManagerRepository")
+@Repository("mainRepo")
 public interface apiService {
 
-    public List<ApiManagerDto> findApiList();
+     List<ApiManagerDto> findApiList();
 
-    public List<ParameterManagerDto> findParamList();
+     List<ParameterManagerDto> findParamList();
+
+
 }
