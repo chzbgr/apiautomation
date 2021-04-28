@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public class StoreExampleImpl implements StoreExample {
 
-    @Autowired
-    private ApiRepository apiRepository;
+//    @Autowired
+//    private ApiRepository apiRepository;
 
     @Override
     public List<String> findAll(String data) {

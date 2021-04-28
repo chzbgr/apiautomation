@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="UTF-8">
+        <title>Api 목록</title>
+        <style>
+            h3 {
+                text-align: center;
+            }
+            table {
+                text-align : center;
+                width: 30%;
+                border: 2px solid #444444;
+                border-collapse: collapse;
+                /*background-position : center;*/
+                margin:0 auto;
+            }
+            th, td {
+                border: 2px solid #444444;
+                padding: 10px;
+
+            }
+        </style>
+    </head>
+
+    <body>
+        <h3>API를 선택하세요</h3>
+        <table>
+            <tr>
+                <th>API 명</th>
+            </tr>
+            <tr th:each="apiList: ${apiList}">
+                <td><a th:text="${apiList.apiName}" th:onclick="selectApi([[${apiList.apiId}]])"></a></td>
+            </tr>
+        </table>
+    </body>
+    <script type="text/javascript" src="../../assets/js/jquery-3.4.1.js"></script>
+
+    <script>
+        function selectApi(apiId) {
+            location.href="apiRequest?apiId="+apiId;
+        }
+    </script>
+</html>

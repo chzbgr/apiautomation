@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<html lang="en">
+    <head>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <meta charset="UTF-8">
+        <title>Api 요청</title>
+        <style>
+            button {
+                float : right;
+            }
+            h2 {
+                text-align: center;
+            }
+            table {
+                width: 70%;
+                border: 2px solid #444444;
+                border-collapse: collapse;
+                /*margin_left : auto;*/
+                /*margin_right : auto;*/
+                margin:0 auto;
+            }
+            th, td {
+                border: 2px solid #444444;
+                padding: 10px;
+                margin:0 auto;
+            }
+            td.k {
+                text-align: center;
+            }
+        </style>
+    </head>
+
+    <body>
+        <h2>요청변수 입력</h2>
+        <form th:action="@{/parameterRequest}" method="post">
+            <table>
+                <tr>
+
+                    <th>변수명</th>
+                    <th>옵션</th>
+                    <th>항목 설명</th>
+                    <th>값 입력</th>
+                </tr>
+                <tr th:each="parameterList: ${parameterList}">
+                    <td th:text="${parameterList.parameterDes}"></td>
+                    <td th:text="${parameterList.parameterType}"></td>
+                    <td th:text="${parameterList.valueDes}"></td>
+                    <td class="k"><input type="text" class="form-control" th:name="parameterList.parameterName"></td>
+                </tr>
+            </table>
+            <button type="submit">요청하기</button>
+        </form>
+
+
+<!--        <script type="text/javascript">-->
+<!--            function setParams() {-->
+<!--                var keyArr = [];-->
+<!--                var valArr = [];-->
+<!--                var apiId = $("#apiId").val();-->
+
+<!--                $("#paramTable tbody tr").each(function(index, el) {-->
+<!--                    var key = $(el).find('td:first').text();-->
+<!--                    var value = $(el).find('input').val();-->
+
+<!--                    keyArr.push(key);-->
+<!--                    valArr.push(value);-->
+<!--                });-->
+<!--                callPublicApi(apiId, keyArr, valArr);-->
+<!--            }-->
+
+<!--            function callPublicApi(apiId, keyArr, valArr) {-->
+<!--                $.ajax({-->
+<!--                    url: "http://localhost:8080/apiRequest/callApi",-->
+<!--                    dataType: "json",-->
+<!--                    data: {-->
+<!--                        apiId : apiId,-->
+<!--                        key: keyArr,-->
+<!--                        value: valArr-->
+<!--                    },-->
+<!--                    traditional: true,-->
+<!--                    type: "POST",-->
+<!--                    success: function() {-->
+<!--                        var option = "width = 500, height = 500";-->
+<!--                        window.open("/api/preview", "출력결과 미리보기", option);-->
+<!--                    }-->
+<!--                })-->
+<!--            }-->
+<!--        </script>-->
+
+    </body>
+
+</html>
