@@ -14,10 +14,6 @@ public class ApiServiceImpl implements apiService {
     public mainRepo mainrepo;
 
 
-    public ApiServiceImpl(mainRepo mainrepo){
-        this.mainrepo =mainrepo;
-
-    }
 
     @Override
     public List<ApiManagerDto> findApiList() {

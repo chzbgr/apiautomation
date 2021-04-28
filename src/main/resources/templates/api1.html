@@ -13,41 +13,46 @@
 
 <form action="/main/api1" method="post">
     <div>
-    <table id="paramTable" border=2>
-        <thead>
-        <th>API_번호</th>
-        <th>변수명</th>
-        <th>타입</th>
-        <th>설명</th>
-        <th>값_설명</th>
-        <th>값을 입력하세요</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="params : ${plist}">
-            <input type="hidden" name="keyArr" th:value="${params.parameterName}"/>
-            <td th:text="${params.apiId}"></td>
-            <td th:text="${params.parameterName}"></td>
-            <td th:text="${params.parameterDes}"></td>
-            <td th:text="${params.parameterType}"></td>
-            <td th:text="${params.valueDes}"></td>
-            <td><label>
-                <input type="text" name="valueArr"/>
-            </label></td>
-        </tr>
-        </tbody>
-    </table>
+        <table id="paramTable" border=2>
+
+            <thead>
+            <th>API_번호</th>
+            <th>변수명</th>
+            <th>타입</th>
+            <th>설명</th>
+            <th>값_설명</th>
+            <th>값을 입력하세요</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="params : ${plist}">
+                <input type="hidden" name="keyArr" th:value="${params.parameterName}"/>
+                <td th:text="${params.apiId}"></td>
+                <td th:text="${params.parameterName}"></td>
+                <td th:text="${params.parameterDes}"></td>
+                <td th:text="${params.parameterType}"></td>
+                <td th:text="${params.valueDes}"></td>
+                <input type="hidden" name="apiId" th:value="${params.apiId}"/>
+                <td>
+                    <label>
+                        <input type="text" name="valueArr"/>
+                    </label>
+                </td>
+            </tr>
+            </tbody>
+
+        </table>
     </div>
     <div>
         <!--<button type="button" onclick="setParams();">요청</button>-->
         <button type="submit" value="submit">요청</button>
+
     </div>
+
 </form>
 
 
-
-
 </body>
-
 
 </html>

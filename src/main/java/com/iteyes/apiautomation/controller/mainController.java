@@ -1,7 +1,9 @@
 package com.iteyes.apiautomation.controller;
 
+import com.iteyes.apiautomation.dto.ApiManagerDto;
 import com.iteyes.apiautomation.dto.ParameterManagerDto;
 import com.iteyes.apiautomation.service.logic.ApiServiceImpl;
+import com.iteyes.apiautomation.service.logic.UrlCreateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -10,9 +12,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Controller
@@ -22,6 +22,8 @@ public class mainController {
     @Autowired
     private ApiServiceImpl apiService;
 
+    @Autowired
+    private UrlCreateServiceImpl urlCreateService;
 
     @RequestMapping("main")
     public String getApiList(Model model) {
@@ -29,7 +31,6 @@ public class mainController {
         model.addAttribute("alist", apiService.findApiList());
 
         return "main";
-
     }
 
     @RequestMapping(value = "/main/api1", method = RequestMethod.GET)
@@ -37,27 +38,22 @@ public class mainController {
 
         List<ParameterManagerDto> list = apiService.findParamList();
         model.addAttribute("plist", list);
+
+        List<ApiManagerDto> alist = apiService.findApiList();
+
+        model.addAttribute("alist",alist);
+
         return "api1";
     }
 
+    @RequestMapping(value="/main/api1",method=RequestMethod.POST)
+    public String callApi(@RequestParam(value="apiId")String apiId,Model model,@RequestParam(value="keyArr") List<String> keyArr, @RequestParam(value="valueArr") List<String> valueArr)throws Exception {
 
-    @PostMapping("/main/api1")
-    public String callApi(Model model,
-                          @RequestParam(value="keyArr") List<String> keyArr,
-                          @RequestParam(value="valueArr") List<String> valueArr) {
-
-        System.out.println(keyArr.toString());
-        System.out.println(valueArr.toString());
-
-        Map<String, String> map = new HashMap<>();
-
-        for(int i = 0; i < keyArr.size(); i++) {
-            map.put(keyArr.get(i), keyArr.get(i));
-        }
-
-        model.addAttribute("preview",map);
+        List<String> apiPreview = urlCreateService.showPreview(apiId,keyArr,valueArr);
+        model.addAttribute("a",apiPreview);
         return "preview";
     }
+
 }
 
 

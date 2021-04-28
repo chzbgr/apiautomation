@@ -1,10 +1,9 @@
 package com.iteyes.apiautomation.store;
 
 import com.iteyes.apiautomation.dto.ApiManagerDto;
-import com.iteyes.apiautomation.dto.BogunCountDto;
 import com.iteyes.apiautomation.dto.ParameterManagerDto;
 import com.iteyes.apiautomation.store.repo.ApiManagerRepository;
-import com.iteyes.apiautomation.store.repo.BogunRepository;
+
 import com.iteyes.apiautomation.store.repo.ParameterManagerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,7 +35,18 @@ public class mainRepoImpl implements  mainRepo{
     }
 
     @Override
-    public List<BogunCountDto> previewParameter() {
-
+    public List<String> findParameterNameByApiId(String apiId){
+        return parameterManagerRepository.findParameterNameByApiId(apiId);
     }
+
+    @Override
+    public String findServiceKeyByApiId(String apiId){
+        return apiManagerRepository.findServiceKeyByApiId(apiId);
+    }
+
+    @Override
+    public String findUrlByApiId(String apiId){
+        return apiManagerRepository.findUrlByApiId(apiId);
+    }
+
 }

@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ParameterManagerRepository extends JpaRepository<ParameterManager,String> {
     List<ParameterManager> findAllByApiId(String apiId);
+
+    List<String> findParameterNameByApiId(String apiId);
 }
