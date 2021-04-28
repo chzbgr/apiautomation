@@ -1,10 +1,7 @@
 package com.iteyes.apiautomation.domain;
 
 import com.iteyes.apiautomation.store.entity.ParameterManager;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Builder
 @Data

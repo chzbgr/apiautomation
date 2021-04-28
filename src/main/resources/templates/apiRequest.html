@@ -29,10 +29,10 @@
         <td th:text="${parameterList.parameterDes}"></td>
         <td th:text="${parameterList.parameterType}"></td>
         <td th:text="${parameterList.valueDes}"></td>
-        <td><input type="text" class="form-control" th:name="parameterList.parameterName"></td>
+        <td><input type="text" class="form-control" name="parameterValue"></td>
     </tr>
     </table>
-    <button type="submit">요청</button>
+    <button type="submit" th:value="${apiId}" name="apiId">요청</button>
 </form>
 </body>
 </html>

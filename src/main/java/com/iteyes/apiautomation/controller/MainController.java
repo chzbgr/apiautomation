@@ -1,7 +1,7 @@
 package com.iteyes.apiautomation.controller;
 
 import com.iteyes.apiautomation.domain.ApiManagerDTO;
-import com.iteyes.apiautomation.service.ApiService;
+import com.iteyes.apiautomation.service.DataService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,19 +15,12 @@ import java.util.List;
 public class MainController {
 
     @Autowired
-    private ApiService apiService;
+    private DataService dataService;
 
-    public MainController(ApiService apiService) {
-        this.apiService = apiService;
-    }
-
-
-//    @Autowired
-//    private ApiManagerRepository apiManagerRepository;
 
     @GetMapping("/main")
     public String list(Model model) {
-        List<ApiManagerDTO> apiList = apiService.getApiList();
+        List<ApiManagerDTO> apiList = dataService.getApiList();
         model.addAttribute("apiList", apiList);
         return "main";
     }

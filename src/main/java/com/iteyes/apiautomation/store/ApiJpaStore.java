@@ -17,12 +17,7 @@ public class ApiJpaStore implements ApiStore {
     private ApiManagerRepository apiManagerRepository;
 
     @Autowired
-    private final ParameterManagerRepository parameterManagerRepository;
-
-    public ApiJpaStore(ApiManagerRepository apiManagerRepository, ParameterManagerRepository parameterManagerRepository) {
-        this.apiManagerRepository = apiManagerRepository;
-        this.parameterManagerRepository = parameterManagerRepository;
-    }
+    private ParameterManagerRepository parameterManagerRepository;
 
 
     @Override
@@ -33,5 +28,21 @@ public class ApiJpaStore implements ApiStore {
     @Override
     public List<ParameterManagerDTO> findAllParameterList(String apiID) {
         return parameterManagerRepository.findAllByApiId(apiID).stream().map(ParameterManagerDTO::new).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> findParameterNameByApiId(String apiId) {
+        return parameterManagerRepository.findParameterNameByApiId(apiId);
+
+    }
+
+    @Override
+    public String findServiceKeyByApiId(String apiId) {
+        return apiManagerRepository.findServiceKeyByApiId(apiId);
+    }
+
+    @Override
+    public String findUrlByApiId(String apiId) {
+        return apiManagerRepository.findUrlByApiId(apiId);
     }
 }
