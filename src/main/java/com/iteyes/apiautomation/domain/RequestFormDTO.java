@@ -14,8 +14,4 @@ public class RequestFormDTO {
     private String parameterKey;
     private String parameterValue;
 
-    public RequestFormDTO(RequestFormDTO requestFormDTO) {
-        this.parameterKey = requestFormDTO.parameterKey;
-        this.parameterValue = requestFormDTO.parameterValue;
-    }
 }

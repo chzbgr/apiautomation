@@ -27,9 +27,6 @@ public class Covid19SeoulPatientInfo {
     @Column(name = "CORONA19_NO")
     private String corona19No;
 
-//    @Column(name = "SAVE_TIME")
-//    private String saveTime;
-
     @Column(name = "CORONA19_COUNTRY")
     private String corona19Country;
 
@@ -57,6 +54,7 @@ public class Covid19SeoulPatientInfo {
     @Column(name = "CORONA19_IDATE")
     private String corona19Idate;
 
+    @Id
     @Column(name = "CORONA19_MDATE")
     private String corona19Mdate;
 

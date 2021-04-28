@@ -19,7 +19,6 @@ public class ApiJpaStore implements ApiStore {
     @Autowired
     private ParameterManagerRepository parameterManagerRepository;
 
-
     @Override
     public List<ApiManagerDTO> findAllApiList() {
         return apiManagerRepository.findAll().stream().map(ApiManagerDTO::new).collect(Collectors.toList());
@@ -33,7 +32,6 @@ public class ApiJpaStore implements ApiStore {
     @Override
     public List<String> findParameterNameByApiId(String apiId) {
         return parameterManagerRepository.findParameterNameByApiId(apiId);
-
     }
 
     @Override

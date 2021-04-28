@@ -1,9 +1,11 @@
 package com.iteyes.apiautomation.store.entity;
 
-import com.iteyes.apiautomation.store.entity.key.Covid19SeoulPatientInfoKey;
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Getter
@@ -87,9 +89,6 @@ public class Covid19SeoulInfectionCount {
 
     @Column(name = "CHECKING")
     private String checking;
-
-
-
 
 
 }

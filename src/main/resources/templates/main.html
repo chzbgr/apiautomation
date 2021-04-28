@@ -4,20 +4,34 @@
     <meta charset="UTF-8">
     <title>Api 목록</title>
     <style>
-        table {
-            width: 30%;
-            border: 1px solid #444444;
+        body { background: #fff; }
+        .bluetop {
             border-collapse: collapse;
+            border-top: 3px solid #168;
         }
-        th, td {
-            border: 1px solid #444444;
+        .bluetop th {
+            color: #168;
+            background: #f0f6f9;
+        }
+        .bluetop th, .bluetop td {
             padding: 10px;
+            border: 1px solid #ddd;
+        }
+        .bluetop th:first-child, .bluetop td:first-child {
+            border-left: 0;
+        }
+        .bluetop th:last-child, .bluetop td:last-child {
+            border-right: 0;
+        }
+        table {
+            width: 600px;
         }
     </style>
 </head>
 <body>
-    <h3>Api를 선택해주세요</h3>
-    <table>
+<br>
+<h3 style="color:#168">&nbsp;&nbsp;■ Api 선택</h3>
+    <table class="bluetop">
         <tr>
             <th>Api 명</th>
         </tr>
@@ -29,7 +43,7 @@
 <script type="text/javascript" src="../../assets/js/jquery-3.4.1.js"></script>
 <script>
     function selectApi(apiId) {
-        location.href="apiRequest?apiId="+apiId;
+        location.href="parameterList?apiId="+apiId;
     }
 </script>
 </html>
