@@ -9,12 +9,13 @@ public interface mainRepo {
 
     List<ApiManagerDto> findAllApiList();
 
-    List<ParameterManagerDto> findAllParamList();
+    List<ParameterManagerDto> findAllParamList(String apiId);
 
     List<String> findParameterNameByApiId(String apiId);
 
     String findServiceKeyByApiId(String apiId);
 
     String findUrlByApiId(String apiId);
+
 
 }

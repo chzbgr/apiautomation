@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 
 @Repository
-public class mainRepoImpl implements  mainRepo{
+public class mainRepoImpl implements mainRepo{
 
     @Autowired
     private ApiManagerRepository apiManagerRepository;
@@ -28,8 +28,8 @@ public class mainRepoImpl implements  mainRepo{
     }
 
     @Override
-    public List<ParameterManagerDto> findAllParamList(){
-        List<ParameterManagerDto> parameterManagerDtoList = parameterManagerRepository.findAllByApiId("api1").stream().map(ParameterManagerDto::new).collect(Collectors.toList());
+    public List<ParameterManagerDto> findAllParamList(String apiId){
+        List<ParameterManagerDto> parameterManagerDtoList = parameterManagerRepository.findAllByApiId(apiId).stream().map(ParameterManagerDto::new).collect(Collectors.toList());
 
         return parameterManagerDtoList;
     }

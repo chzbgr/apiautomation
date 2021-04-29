@@ -28,30 +28,33 @@ public class mainController {
     @RequestMapping("main")
     public String getApiList(Model model) {
 
-        model.addAttribute("alist", apiService.findApiList());
+        List<ApiManagerDto> alist =apiService.findApiList();
+
+        model.addAttribute("alist", alist);
 
         return "main";
     }
 
-    @RequestMapping(value = "/main/api1", method = RequestMethod.GET)
-    public String getParamList(Model model) {
+    @RequestMapping( value = "/main/{apiId}", method = RequestMethod.GET)
+    public String getParamList( Model model,@PathVariable(name="apiId") String apiId) {
 
-        List<ParameterManagerDto> list = apiService.findParamList();
+        List<ParameterManagerDto> list = apiService.findParamList(apiId);
+
         model.addAttribute("plist", list);
 
-        List<ApiManagerDto> alist = apiService.findApiList();
-
-        model.addAttribute("alist",alist);
+      //  model.addAttribute("apiId",apiId);
 
         return "api1";
     }
 
     @RequestMapping(value="/main/api1",method=RequestMethod.POST)
     public String callApi(@RequestParam(value="apiId")String apiId,Model model,@RequestParam(value="keyArr") List<String> keyArr, @RequestParam(value="valueArr") List<String> valueArr)throws Exception {
-
+        System.out.println("넘어온 controller의 apiid는:"+apiId);
         List<String> apiPreview = urlCreateService.showPreview(apiId,keyArr,valueArr);
         model.addAttribute("a",apiPreview);
         return "preview";
+
+
     }
 
 }

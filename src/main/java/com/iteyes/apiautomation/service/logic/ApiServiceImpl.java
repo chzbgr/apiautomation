@@ -13,21 +13,16 @@ public class ApiServiceImpl implements apiService {
     @Autowired
     public mainRepo mainrepo;
 
-
-
     @Override
     public List<ApiManagerDto> findApiList() {
         return mainrepo.findAllApiList();
     }
 
-
     @Override
-    public List<ParameterManagerDto> findParamList(){ return mainrepo.findAllParamList(); }
+    public List<ParameterManagerDto> findParamList(String apiId) {
+        return mainrepo.findAllParamList(apiId);
 
+    }
 
 
 }
-
-
-
-

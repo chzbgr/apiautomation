@@ -6,10 +6,10 @@
     <meta charset="UTF-8">
     <title>입력</title>
 </head>
-
+<h2>My Api</h2>
 <body>
 
-<h2> 보건복지부_코로나19 감염_현황 </h2>
+
 
 <form action="/main/api1" method="post">
     <div>
@@ -33,7 +33,6 @@
                 <td th:text="${params.parameterDes}"></td>
                 <td th:text="${params.parameterType}"></td>
                 <td th:text="${params.valueDes}"></td>
-                <input type="hidden" name="apiId" th:value="${params.apiId}"/>
                 <td>
                     <label>
                         <input type="text" name="valueArr"/>
@@ -46,8 +45,7 @@
     </div>
     <div>
         <!--<button type="button" onclick="setParams();">요청</button>-->
-        <button type="submit" value="submit">요청</button>
-
+        <button type="submit" th:value="${apiId}" name="apiId" class="button">요청</button>
     </div>
 
 </form>

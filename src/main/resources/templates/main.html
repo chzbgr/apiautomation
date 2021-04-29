@@ -31,12 +31,10 @@
 <table border=2>
     <tr th:each="a: ${alist}">
         <td th:text="${a.apiId}"</td>
-        <td>
-            <button type="submit"  th:text="${a.apiName}" th:onclick="test([[${a.ApiId}]])"> </button>
-        </td>
+            <td><a th:text="${a.apiName}" th:onclick="test([[${a.apiId}]])"></a></td>
     </tr>
 </table>
-</ul>
+
 
 
 <h3></h3>

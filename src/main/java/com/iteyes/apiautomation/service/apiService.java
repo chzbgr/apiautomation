@@ -12,7 +12,7 @@ public interface apiService {
 
      List<ApiManagerDto> findApiList();
 
-     List<ParameterManagerDto> findParamList();
+     List<ParameterManagerDto> findParamList(String apiId);
 
 
 }

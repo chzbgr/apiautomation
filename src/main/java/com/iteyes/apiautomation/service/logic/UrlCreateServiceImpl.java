@@ -4,21 +4,27 @@ import com.iteyes.apiautomation.dto.PreUrlDto;
 import com.iteyes.apiautomation.service.urlCreateService;
 import com.iteyes.apiautomation.store.entity.Covid19InfectionCount;
 import com.iteyes.apiautomation.store.mainRepo;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.protocol.HTTP;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriBuilder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import java.net.URL;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
+import java.io.UnsupportedEncodingException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,109 +48,86 @@ public class UrlCreateServiceImpl implements urlCreateService {
     }
 
     @Override
-    public List<String> showPreview(String apiId, List<String> keyArr, List<String> valueArr) {
+    public List<String> showPreview(String apiId, List<String> keyArr, List<String> valueArr) throws IOException, URISyntaxException, ParserConfigurationException, SAXException {
         String serviceKey = getServiceKey(apiId);
         String url = getUrl(apiId);
-        System.out.println(apiId);
-        System.out.println(keyArr);
-        System.out.println(valueArr);
-        List<PreUrlDto> preUrlDto = getPreUrlDto(apiId, keyArr, valueArr);
 
+        List<PreUrlDto> preUrlDto = getPreUrlDto(keyArr, valueArr);
+        URL requestUrl = urlMake(apiId, url, serviceKey, preUrlDto);
+        System.out.println("드갈주소는:"+requestUrl);
+        List<PreUrlDto> viewUrl =  domParser(apiId,requestUrl);
         return null;
-
     }
-    public List<PreUrlDto> getPreUrlDto(String apiId, List<String> keyArr, List<String> valueArr) {
-        List<String> parameterName = mainrepo.findParameterNameByApiId(apiId);
+
+
+    // 키 밸류 분류 및 저장
+    public List<PreUrlDto> getPreUrlDto(List<String> keyArr, List<String> valueArr) {
+        // List<String> parameterName = mainrepo.findParameterNameByApiId(apiId);
         List<PreUrlDto> requestList = new ArrayList<>();
 
-        for (int i = 0; i < parameterName.size(); i++) {
+        for (int i = 0; i < keyArr.size(); i++) {
             PreUrlDto requestForm = new PreUrlDto();
             requestForm.setParameterKey(keyArr.get(i));
             requestForm.setParameterValue(valueArr.get(i));
             requestList.add(requestForm);
         }
-
         return requestList;
     }
-}
 
+    // url 생성
+    private URL urlMake(String apiId, String url, String serviceKey, List<PreUrlDto> getPreUrlDto) throws URISyntaxException, ClientProtocolException, UnsupportedEncodingException, MalformedURLException {
+        StringBuilder urlBuilder = new StringBuilder(url);
+        URL requestUrl;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   /* // 아이템 값 출력
-    public String pickKey(String apiId, List<String> abc){
-        List<String> aList = new ArrayList<>();
-
-        try {
-            DocumentBuilderFactory Apreview = DocumentBuilderFactory.newInstance();
-            DocumentBuilder previewBuilder = Apreview.newDocumentBuilder();
-            Document doc = previewBuilder.parse("null");
-            doc.getDocumentElement().normalize();
-            NodeList nList = doc.getElementsByTagName("item");
-            //이 부분은 list에 담긴 데이터를 출력하는 부분
-            //위에 담긴 list를 반복문을 통해서 출력한다.
-            //getTextContent()는 전체 정보 의미
-            //getTagValue("tag",element) : 입력한 tag정보를 의미
-            //getTagValue("tag" <- 실질적인 tag의 변수값을 넣어줘야 함)
-            //getTagValue는 따로 메소드를 만들어 준 것
-            for (int temp = 0; temp < nList.getLength(); temp++) {
-                //for문을 통해 모든 데이터를 출력한다
-                List<String> pList = new ArrayList<>();
-                Node nNode = nList.item(temp);
-
-                Element params = (Element) nNode;
-
-                pList.add(getValue("accDefRate", params));
-                pList.add(getValue("accExamCnt", params));
-                pList.add(getValue("accExamCompCnt", params));
-                pList.add(getValue("careCnt", params));
-                pList.add(getValue("clearCnt", params));
-                pList.add(getValue("createDt", params));
-                pList.add(getValue("deathCnt", params));
-                pList.add(getValue("decideCnt", params));
-                pList.add(getValue("resutlNegCnt", params));
-                pList.add(getValue("seq", params));
-                pList.add(getValue("stateDt", params));
-                pList.add(getValue("stateTime", params));
-                pList.add(getValue("updateDt", params));
+        if (apiId.equals("api1")) {
+            urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + serviceKey);
+            for (int i = 0; i < getPreUrlDto.size(); i++) {
+                urlBuilder.append("&" + URLEncoder.encode(getPreUrlDto.get(i).getParameterKey(), "UTF-8") + "=" + URLEncoder.encode(getPreUrlDto.get(i).getParameterValue(), "UTF-8"));
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-       return null;
-    }
-    //getValue 만들기
-    private String getValue(String tag,Element params) {
-        NodeList nList = params.getElementsByTagName(tag).item(0).getChildNodes();
-        Node nValue = (Node) nList.item(0);
-        if (nValue == null) {
+            requestUrl = new URL(urlBuilder.toString());
+        } else {
             return null;
         }
-        return nValue.getNodeValue();
-    }*/
+        return requestUrl;
+    }
 
 
+    //api 호출
+//        public String callApi(String requestUrl) throws IOException {
+//
+//        StringBuffer result = new StringBuffer();
+//
+//        URL url = new URL(requestUrl);
+//        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+//        urlConnection.setRequestMethod("POST");
+//
+//        BufferedReader br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(),"UTF-8"));
+//
+//        String returnLine;
+//        result.append("<xmp>");
+//        while((returnLine = br.readLine()) !=null){
+//            result.append(returnLine+"\n");
+//            }
+//        urlConnection.disconnect();
+//        return result+"</xmp>";
+//    }
+
+    // 아이템 값 출력
+    public List<PreUrlDto> domParser(String apiId, URL requestUrl ) throws ParserConfigurationException, SAXException,IOException {
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilder documentBuilder = factory.newDocumentBuilder();
+
+        Document document = documentBuilder.parse(String.valueOf(requestUrl));
+        //root 구하기
+        Element root = document.getDocumentElement();
+
+
+//dj 저는 코딩을 못해요 ㅠㅠㅠ
+       return null;
+
+
+        }
+    }
 
