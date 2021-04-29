@@ -2,25 +2,24 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
-
     <title>API 적재 결과</title>
     <style>
         body { background: #fff; }
-        .blueone {
+        .blueOne {
             border-collapse: collapse;
         }
-        .blueone th {
+        .blueOne th {
             padding: 10px;
             color: #168;
             border-bottom: 3px solid #168;
             text-align: left;
         }
-        .blueone td {
+        .blueOne td {
             color: #669;
             padding: 10px;
             border-bottom: 1px solid #ddd;
         }
-        .blueone tr:hover td {
+        .blueOne tr:hover td {
             color: #004;
         }
         table {
@@ -41,19 +40,20 @@
             margin: 4px;
             cursor: pointer;
         }
-
     </style>
 </head>
 <body>
-<br>
-<h3 style="color:#168">&nbsp;&nbsp;■ 적재 결과</h3>
-<table class="blueone">
-    <tr>
-        <th style="text-align: center">결과 메시지</th>
-    </tr>
-    <tr><td style="text-align: center"><a th:text="${resultMessage}"></a></td></tr>
-</table>
-<br>
+    <br>
+    <h3 style="color:#168">&nbsp;&nbsp;■ 적재 결과</h3>
+    <table class="blueOne">
+        <tr>
+            <th style="text-align: center">결과 메시지</th>
+        </tr>
+        <tr>
+            <td style="text-align: center"><a th:text="${resultMessage}"></a></td>
+        </tr>
+    </table>
+    <br>
     <button type="button" th:onclick=location.href="/apiList" class="button">메인</button>
     <input type="button" value="이전" onclick="history.back();" class="button">
 </body>

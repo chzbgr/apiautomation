@@ -1,7 +1,6 @@
 package com.iteyes.apiautomation.domain;
 
 import com.iteyes.apiautomation.store.entity.Covid19SeoulInfectionRegionCount;
-import com.iteyes.apiautomation.store.entity.Covid19SeoulPatientInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,6 +20,10 @@ public class Covid19SeoulInfectionRegionCountDTO {
     private String YONGSAN;
     private String YONGSANADD;
 
+    /**
+     * DTO 객체를 Entity 형태로 변환
+     * @return entity
+     */
     @Builder
     public Covid19SeoulInfectionRegionCount toEntity() {
         return Covid19SeoulInfectionRegionCount.builder()

@@ -26,6 +26,10 @@ public class Covid19SeoulPatientInfoDTO {
     private String CORONA19_IDATE;
     private String CORONA19_MDATE;
 
+    /**
+     * DTO 객체를 Entity 형태로 변환
+     * @return entity
+     */
     @Builder
     public Covid19SeoulPatientInfo toEntity() {
         return Covid19SeoulPatientInfo.builder()

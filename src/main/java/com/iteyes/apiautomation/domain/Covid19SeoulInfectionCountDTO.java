@@ -36,6 +36,11 @@ public class Covid19SeoulInfectionCountDTO {
     private String JGK_CONT_GS;
     private String JGK_CONT_GH;
     private String CHECKING;
+
+    /**
+     * DTO 객체를 Entity 형태로 변환
+     * @return entity
+     */
     @Builder
     public Covid19SeoulInfectionCount toEntity() {
         return Covid19SeoulInfectionCount.builder()

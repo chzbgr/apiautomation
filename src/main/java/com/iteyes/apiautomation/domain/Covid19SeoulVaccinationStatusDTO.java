@@ -48,6 +48,10 @@ public class Covid19SeoulVaccinationStatusDTO {
     private String S_4QT_FIR_ADD;
     private String S_4QT_SCD_ADD;
 
+    /**
+     * DTO 객체를 Entity 형태로 변환
+     * @return entity
+     */
     @Builder
     public Covid19SeoulVaccinationStatus toEntity() {
         return Covid19SeoulVaccinationStatus.builder()

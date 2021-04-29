@@ -26,7 +26,8 @@ public class ApiJpaStore implements ApiStore {
 
     @Override
     public List<ParameterManagerDTO> findAllParameterList(String apiID) {
-        return parameterManagerRepository.findAllByApiId(apiID).stream().map(ParameterManagerDTO::new).collect(Collectors.toList());
+        return parameterManagerRepository.findAllByApiId(apiID).stream().map(ParameterManagerDTO::new).
+                collect(Collectors.toList());
     }
 
     @Override

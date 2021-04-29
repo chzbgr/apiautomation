@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
-
 /**
  * @author eunju Kang
  */
@@ -40,7 +39,7 @@ public class MainController {
      * api의 요청 변수 목록
      * @param apiId 첫 화면에서 선택한 api의 Id값 전달
      * @param model 요청 변수 목록을 화면에 전달
-     * @return apiRequest
+     * @return apiRequest api 요청하는 화면(변수 목록)
      */
     @GetMapping("/parameterList")
     public String apiCallRequest(@RequestParam("apiId") String apiId, Model model) {
@@ -50,6 +49,14 @@ public class MainController {
         return "apiRequest";
     }
 
+    /**
+     * api 요청 결과 미리보기 제공
+     * @param parameterValue 요청변수 입력 값
+     * @param apiId
+     * @param model 미리보기 결과 code, message 전달
+     * @return preview html
+     * @throws Exception
+     */
     @PostMapping("/preview")
     public String previewRequest(@RequestParam(value = "parameterValue", required = true) List<String> parameterValue,
                                  @RequestParam(value = "apiId") String apiId, Model model) throws Exception {
@@ -57,11 +64,16 @@ public class MainController {
         List<String> previewList = apiService.previewJson(apiId, parameterValue);
         model.addAttribute("resultCode", previewList.get(0));
         model.addAttribute("resultMessage", previewList.get(1));
-
-        log.info(previewList.toString());
         return "preview";
     }
 
+    /**
+     * api 호출 결과 파싱하여 DB저장
+     * @param parameterValue 요청변수 입력 값
+     * @param apiId
+     * @param model 적재 결과 message 전달
+     * @return apiSaveResult html
+     */
     @PostMapping("/apiSaveResult")
     public String saveRequest(@RequestParam(value = "parameterValue", required = true) List<String> parameterValue,
                               @RequestParam(value = "apiId") String apiId, Model model) {
@@ -72,10 +84,7 @@ public class MainController {
         } catch (Exception e) {
             model.addAttribute("resultMessage", e.getMessage());
         }
-
         return "apiSaveResult";
     }
-
-
 
 }

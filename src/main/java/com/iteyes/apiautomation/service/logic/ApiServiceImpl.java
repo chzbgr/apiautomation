@@ -33,6 +33,9 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * api 출력, 요청, 호출, 적재를 수행하는 로직
+ */
 @Log4j2
 @Service
 public class ApiServiceImpl implements ApiService {
@@ -52,16 +55,33 @@ public class ApiServiceImpl implements ApiService {
     @Autowired
     private Covid19SeoulInfectionRegionCountRepository covid19SeoulInfectionRegionCountRepository;
 
+    /**
+     * Api 목록 제공
+     * @return apiList
+     */
     @Override
     public List<ApiManagerDTO> getApiList() {
         return apiStore.findAllApiList();
     }
 
+    /**
+     * api 별 요청 변수 제공
+     * @param apiId
+     * @return parameterList
+     */
     @Override
     public List<ParameterManagerDTO> getParameterList(String apiId) {
         return apiStore.findAllParameterList(apiId);
     }
 
+    /**
+     * api 호출 결과 일부분 파싱 후
+     * 미리보기 결과 code, message 출력
+     * @param apiId
+     * @param parameterValue 요청 변수 입력 값
+     * @return previewList
+     * @throws Exception
+     */
     @Override
     public List<String> previewJson(String apiId, List<String> parameterValue) throws Exception {
         String serviceKey = apiStore.findServiceKeyByApiId(apiId);
@@ -77,6 +97,14 @@ public class ApiServiceImpl implements ApiService {
         return previewList;
     }
 
+    /**
+     * api 호출 결과 전체 파싱 후
+     * DB에 저장
+     * @param apiId
+     * @param parameterValue
+     * @return "성공"/"실패"
+     * @throws Exception
+     */
     @Override
     public String saveJson(String apiId, List<String> parameterValue) throws Exception {
         try {
@@ -86,7 +114,6 @@ public class ApiServiceImpl implements ApiService {
 
             List<RequestFormDTO> requestForm = getRequestForm(apiId, parameterValue);
             URL requestUrl = createRequestUrl(apiId, url, serviceKey, requestForm);
-
             String resultCall = callApi(requestUrl);
 
             return saveParseJson(resultCall, service);
@@ -95,10 +122,16 @@ public class ApiServiceImpl implements ApiService {
         }
     }
 
-    //    ********** URL 만들기 **************
+    /**
+     * 요청 변수 입력값과 변수 명을 DTO 형태로 변환
+     * @param apiId
+     * @param parameterValue
+     * @return requestList requestFormDTO 리스트
+     */
     private List<RequestFormDTO> getRequestForm(String apiId, List<String> parameterValue) {
         List<String> parameterName = apiStore.findParameterNameByApiId(apiId);
         List<RequestFormDTO> requestList = new ArrayList<>();
+
         for (int i = 0; i < parameterName.size(); i++) {
             RequestFormDTO requestForm = new RequestFormDTO();
             requestForm.setParameterKey(parameterName.get(i));
@@ -108,35 +141,55 @@ public class ApiServiceImpl implements ApiService {
         return requestList;
     }
 
-    private URL createRequestUrl(String apiId, String url, String serviceKey, List<RequestFormDTO> requestForm) throws IOException {
+    /**
+     * 요청 변수를 url 형식으로 변환
+     * @param apiId
+     * @param url
+     * @param serviceKey
+     * @param requestForm
+     * @return requestUrl
+     * @throws IOException
+     */
+    private URL createRequestUrl(String apiId, String url, String serviceKey,
+                                 List<RequestFormDTO> requestForm) throws IOException {
+
         StringBuilder urlBuilder = new StringBuilder(url);
         URL requestUrl;
 
         if (apiId.equals("api1")) {
             urlBuilder.append("?" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + serviceKey);
-            urlBuilder.append("&" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" + URLEncoder.encode("-", "UTF-8"));
+            urlBuilder.append("&" + URLEncoder.encode("ServiceKey", "UTF-8") + "=" +
+                    URLEncoder.encode("-", "UTF-8"));
+
             for (int i = 0; i < requestForm.size(); i++) {
-                urlBuilder.append("&" + URLEncoder.encode(requestForm.get(i).getParameterKey(), "UTF-8") + "=" + URLEncoder.encode(requestForm.get(i).getParameterValue(), "UTF-8"));
+                urlBuilder.append("&" + URLEncoder.encode(requestForm.get(i).getParameterKey(), "UTF-8") + "=" +
+                        URLEncoder.encode(requestForm.get(i).getParameterValue(), "UTF-8"));
             }
-            requestUrl = new URL(urlBuilder.toString());
         } else {
             urlBuilder.append("/" + URLEncoder.encode(serviceKey, "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(requestForm.get(3).getParameterValue(), "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(requestForm.get(1).getParameterValue(), "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(requestForm.get(2).getParameterValue(), "UTF-8"));
             urlBuilder.append("/" + URLEncoder.encode(requestForm.get(0).getParameterValue(), "UTF-8"));
-            requestUrl = new URL(urlBuilder.toString());
         }
+
+        requestUrl = new URL(urlBuilder.toString());
         return requestUrl;
     }
 
+    /**
+     * api 호출 후
+     * 결과 String으로 반환
+     * @param requestUrl
+     * @return sb.toString
+     * @throws IOException
+     */
     private String callApi(URL requestUrl) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) requestUrl.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
 
         int responseCode = conn.getResponseCode();
-
         BufferedReader br;
         if (responseCode >= 200 && responseCode <= 300) {
             System.out.println(responseCode);
@@ -144,18 +197,28 @@ public class ApiServiceImpl implements ApiService {
         } else {
             br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
         }
+
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = br.readLine()) != null) {
             sb.append(line);
         }
+
         br.close();
         conn.disconnect();
-
 
         return sb.toString();
     }
 
+    /**
+     * api 호출 결과를 일부분 파싱하여 code, message 반환
+     * 요청이 정상 처리일 경우 json 형식으로 파싱
+     * 비정상 처리일 경우 xml 형식으로 파싱
+     * @param resultApiCall api 호출 결과 문자열
+     * @param service api를 구별하기 위한 service 변수
+     * @return previewResult 결과 code, message 반환
+     * @throws Exception
+     */
     private List<String> previewParseJson(String resultApiCall, String service) throws Exception {
         String code;
         String message;
@@ -168,8 +231,6 @@ public class ApiServiceImpl implements ApiService {
                 JsonObject result = data.getAsJsonObject("RESULT");
                 code = result.get("CODE").getAsString();
                 message = result.get("MESSAGE").getAsString();
-                previewResult.add(code);
-                previewResult.add(message);
             } else {
                 InputSource is = new InputSource(new StringReader(resultApiCall));
                 DocumentBuilder builder;
@@ -185,6 +246,8 @@ public class ApiServiceImpl implements ApiService {
                 previewResult.add(code);
                 previewResult.add(message);
             }
+            previewResult.add(code);
+            previewResult.add(message);
             return previewResult;
 
         } catch (NullPointerException e) {
@@ -198,12 +261,20 @@ public class ApiServiceImpl implements ApiService {
         }
     }
 
-    //        ********** JSON 전체 parsing @ save **************
+    /**
+     * json 객체를 전부 파싱하여 DTO 객체로 변환 후
+     * Entity 로 변환하여 Repository 에 저장
+     * @param resultCall api 호출 결과 String
+     * @param service api를 구별하기 파싱 위한 service 변수
+     * @return "성공"/"실패" 적재 결과 반환
+     * @throws Exception
+     */
     private String saveParseJson(String resultCall, String service) throws Exception {
         try {
             JsonObject jsonObject = new Gson().fromJson(resultCall, JsonObject.class);
             JsonObject data = jsonObject.getAsJsonObject(service);
             JsonArray rowData = data.getAsJsonArray("row");
+
             for (int i = 0; i < rowData.size(); i++) {
                 String rowString = rowData.get(i).toString();
 
@@ -231,31 +302,6 @@ public class ApiServiceImpl implements ApiService {
             throw new Exception("적재 실패");
         }
     }
-
-
-    //        ********** JSON 일부분 parsing **************
-//    public List<String> preParseJson(String resultCallString, String service) throws Exception {
-//        try {
-//            JsonObject jsonObject = new Gson().fromJson(resultCallString, JsonObject.class);
-//            JsonObject data = jsonObject.getAsJsonObject(service);
-//
-//            JsonArray rowData = data.getAsJsonArray("row");
-//            String firstRowString = rowData.get(0).toString();
-//            log.info("첫 row 값 스뜨륑" + firstRowString);
-//            JsonObject resultData = data.getAsJsonObject("RESULT");
-//
-//            String resultString = resultData.toString();
-//            log.info("result 값 스뜨륑" + resultString);
-//            List<String> previewList = new ArrayList<>();
-//            previewList.add(resultString);
-//            previewList.add(firstRowString);
-//            previewList.add(rowData.toString());
-//            log.info("previewList 2번째가 rowdata 맞나 쳌" + previewList.get(2));
-//            return previewList;
-//        } catch (Exception e) {
-//            throw new Exception(e);
-//        }
-//    }
 
 }
 

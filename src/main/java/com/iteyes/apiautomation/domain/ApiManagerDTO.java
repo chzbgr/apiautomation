@@ -1,8 +1,14 @@
 package com.iteyes.apiautomation.domain;
 
 import com.iteyes.apiautomation.store.entity.ApiManager;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+/**
+ * Api 정보 DTO
+ */
 @Builder
 @Data
 @NoArgsConstructor

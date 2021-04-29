@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
@@ -38,70 +37,34 @@
             margin: 4px;
             cursor: pointer;
         }
-
-    </style>
-    <style>
-        #modal {
-            position:relative;
-            width:100%;
-            height:100%;
-            z-index:1;
-        }
-
-        #modal h2 {
-            margin:0;
-        }
-
-        #modal button {
-            display:inline-block;
-            width:100px;
-            margin-left:calc(100% - 100px - 10px);
-        }
-
-        #modal .modal_content {
-            width:300px;
-            margin:100px auto;
-            padding:20px 10px;
-            background:#fff;
-            border:2px solid #666;
-        }
-
-        #modal .modal_layer {
-            position:fixed;
-            top:0;
-            left:0;
-            width:100%;
-            height:100%;
-            background:rgba(0, 0, 0, 0.5);
-            z-index:-1;
-        }
     </style>
 </head>
 <body>
-<form method="post">
-    <br>
-    <h3 style="color:#168">&nbsp;&nbsp;■ 요청변수 입력</h3>
-    <table class="blueone">
-    <tr>
-        <th>변수명</th>
-        <th>옵션</th>
-        <th>항목 설명</th>
-        <th>값 입력</th>
-    </tr>
-    <tr th:each="parameterList: ${parameterList}">
-        <td th:text="${parameterList.parameterDes}"></td>
-        <td th:text="${parameterList.parameterType}"></td>
-        <td th:text="${parameterList.valueDes}"></td>
-        <td><input type="text" class="form-control" name="parameterValue"></td>
-    </tr>
-    </table>
-    <br>
-    <button type="button" th:onclick=location.href="/apiList" class="button">메인</button>
-    <button type="submit"
-            onclick="javascript:
-            form.action='/preview';"
-            th:value="${apiId}" name="apiId" class="button">미리보기</button>
-    <button type="submit" onclick="javascript: form.action='/apiSaveResult';" th:value="${apiId}" name="apiId" class="button">적재</button>
-</form>
+    <form method="post">
+        <br>
+        <h3 style="color:#168">&nbsp;&nbsp;■ 요청변수 입력</h3>
+        <table class="blueone">
+        <tr>
+            <th>변수명</th>
+            <th>옵션</th>
+            <th>항목 설명</th>
+            <th>값 입력</th>
+        </tr>
+        <tr th:each="parameterList: ${parameterList}">
+            <td th:text="${parameterList.parameterDes}"></td>
+            <td th:text="${parameterList.parameterType}"></td>
+            <td th:text="${parameterList.valueDes}"></td>
+            <td><input type="text" class="form-control" name="parameterValue"></td>
+        </tr>
+        </table>
+        <br>
+        <button type="button" th:onclick=location.href="/apiList" class="button">메인</button>
+        <button type="submit"
+                onclick="javascript:
+                form.action='/preview';"
+                th:value="${apiId}" name="apiId" class="button">미리보기</button>
+        <button type="submit" onclick="javascript: form.action='/apiSaveResult';" th:value="${apiId}" name="apiId"
+                class="button">적재</button>
+    </form>
 </body>
 </html>
