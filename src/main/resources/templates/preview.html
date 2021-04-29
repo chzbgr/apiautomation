@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-
-    <title>API 적재 결과</title>
+    <title>Title</title>
     <style>
         body { background: #fff; }
         .blueone {
@@ -45,16 +44,19 @@
     </style>
 </head>
 <body>
-<br>
-<h3 style="color:#168">&nbsp;&nbsp;■ 적재 결과</h3>
+<h3 style="color:#168">&nbsp;&nbsp;■ 요청 미리보기</h3>
 <table class="blueone">
     <tr>
-        <th style="text-align: center">결과 메시지</th>
+        <th style="text-align: center">요청 결과 코드</th>
+        <th style="text-align: center">요청 결과 메시지</th>
     </tr>
-    <tr><td style="text-align: center"><a th:text="${resultMessage}"></a></td></tr>
+    <tr>
+        <td style="text-align: center"><a th:text="${resultCode}"></a></td>
+        <td style="text-align: center"><a th:text="${resultMessage}"></a></td>
+    </tr>
 </table>
 <br>
-    <button type="button" th:onclick=location.href="/apiList" class="button">메인</button>
-    <input type="button" value="이전" onclick="history.back();" class="button">
+<button type="button" th:onclick=location.href="/apiList" class="button">메인</button>
+<input type="button" value="이전" onclick="history.go(-1);" class="button">
 </body>
 </html>

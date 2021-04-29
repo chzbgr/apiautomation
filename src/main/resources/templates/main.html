@@ -5,23 +5,22 @@
     <title>Api 목록</title>
     <style>
         body { background: #fff; }
-        .bluetop {
+        .blueone {
             border-collapse: collapse;
-            border-top: 3px solid #168;
         }
-        .bluetop th {
-            color: #168;
-            background: #f0f6f9;
-        }
-        .bluetop th, .bluetop td {
+        .blueone th {
             padding: 10px;
-            border: 1px solid #ddd;
+            color: #168;
+            border-bottom: 3px solid #168;
+            text-align: left;
         }
-        .bluetop th:first-child, .bluetop td:first-child {
-            border-left: 0;
+        .blueone td {
+            color: #669;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
         }
-        .bluetop th:last-child, .bluetop td:last-child {
-            border-right: 0;
+        .blueone tr:hover td {
+            color: #004;
         }
         table {
             width: 600px;
@@ -31,9 +30,9 @@
 <body>
 <br>
 <h3 style="color:#168">&nbsp;&nbsp;■ Api 선택</h3>
-    <table class="bluetop">
+    <table class="blueone">
         <tr>
-            <th>Api 명</th>
+            <th style="text-align: center">Api 명</th>
         </tr>
         <tr th:each="apiList: ${apiList}">
             <td><a th:text="${apiList.apiName}" th:onclick="selectApi([[${apiList.apiId}]])"></a></td>

@@ -11,13 +11,22 @@ import com.iteyes.apiautomation.store.repository.Covid19SeoulInfectionRegionCoun
 import com.iteyes.apiautomation.store.repository.Covid19SeoulPatientInfoRepository;
 import com.iteyes.apiautomation.store.repository.Covid19SeoulVaccinationStatusRepository;
 import lombok.extern.log4j.Log4j2;
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -54,6 +63,21 @@ public class ApiServiceImpl implements ApiService {
     }
 
     @Override
+    public List<String> previewJson(String apiId, List<String> parameterValue) throws Exception {
+        String serviceKey = apiStore.findServiceKeyByApiId(apiId);
+        String url = apiStore.findUrlByApiId(apiId);
+        String service = parameterValue.get(1);
+
+        List<RequestFormDTO> requestForm = getRequestForm(apiId, parameterValue);
+        URL requestUrl = createRequestUrl(apiId, url, serviceKey, requestForm);
+
+        String resultApiCall = callApi(requestUrl);
+        List<String> previewList = previewParseJson(resultApiCall, service);
+
+        return previewList;
+    }
+
+    @Override
     public String saveJson(String apiId, List<String> parameterValue) throws Exception {
         try {
             String serviceKey = apiStore.findServiceKeyByApiId(apiId);
@@ -63,9 +87,9 @@ public class ApiServiceImpl implements ApiService {
             List<RequestFormDTO> requestForm = getRequestForm(apiId, parameterValue);
             URL requestUrl = createRequestUrl(apiId, url, serviceKey, requestForm);
 
-            String resultCallString = callApi(requestUrl);
+            String resultCall = callApi(requestUrl);
 
-            return saveParseJson(resultCallString, service);
+            return saveParseJson(resultCall, service);
         } catch (Exception e) {
             throw new Exception(e);
         }
@@ -106,17 +130,16 @@ public class ApiServiceImpl implements ApiService {
         return requestUrl;
     }
 
-    //        ********** Api 호출하기 String**************
     private String callApi(URL requestUrl) throws IOException {
         HttpURLConnection conn = (HttpURLConnection) requestUrl.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Content-type", "application/json");
 
-//        responds Code 출력해서 결과 확인
         int responseCode = conn.getResponseCode();
 
         BufferedReader br;
         if (responseCode >= 200 && responseCode <= 300) {
+            System.out.println(responseCode);
             br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
         } else {
             br = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
@@ -129,16 +152,58 @@ public class ApiServiceImpl implements ApiService {
         br.close();
         conn.disconnect();
 
+
         return sb.toString();
     }
 
-    //        ********** JSON 전체 parsing @ save **************
-    private String saveParseJson(String resultCallString, String service) throws Exception {
+    private List<String> previewParseJson(String resultApiCall, String service) throws Exception {
+        String code;
+        String message;
+        List<String> previewResult = new ArrayList<>();
+
         try {
-            JsonObject jsonObject = new Gson().fromJson(resultCallString, JsonObject.class);
+            if (resultApiCall.endsWith("}")) {
+                JsonObject jsonObject = new Gson().fromJson(resultApiCall, JsonObject.class);
+                JsonObject data = jsonObject.getAsJsonObject(service);
+                JsonObject result = data.getAsJsonObject("RESULT");
+                code = result.get("CODE").getAsString();
+                message = result.get("MESSAGE").getAsString();
+                previewResult.add(code);
+                previewResult.add(message);
+            } else {
+                InputSource is = new InputSource(new StringReader(resultApiCall));
+                DocumentBuilder builder;
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(is);
+                XPathFactory xpathFactory = XPathFactory.newInstance();
+                XPath xpath = xpathFactory.newXPath();
+                XPathExpression expr = xpath.compile("/RESULT");
+                NodeList nodeList = (NodeList) expr.evaluate(doc, XPathConstants.NODESET);
+                code = nodeList.item(0).getChildNodes().item(0).getTextContent();
+                message = nodeList.item(0).getChildNodes().item(1).getTextContent();
+                previewResult.add(code);
+                previewResult.add(message);
+            }
+            return previewResult;
+
+        } catch (NullPointerException e) {
+            JsonObject jsonObject = new Gson().fromJson(resultApiCall, JsonObject.class);
+            JsonObject result = jsonObject.getAsJsonObject("RESULT");
+            code = result.get("CODE").getAsString();
+            message = result.get("MESSAGE").getAsString();
+            previewResult.add(code);
+            previewResult.add(message);
+            return previewResult;
+        }
+    }
+
+    //        ********** JSON 전체 parsing @ save **************
+    private String saveParseJson(String resultCall, String service) throws Exception {
+        try {
+            JsonObject jsonObject = new Gson().fromJson(resultCall, JsonObject.class);
             JsonObject data = jsonObject.getAsJsonObject(service);
             JsonArray rowData = data.getAsJsonArray("row");
-
             for (int i = 0; i < rowData.size(); i++) {
                 String rowString = rowData.get(i).toString();
 
@@ -168,7 +233,6 @@ public class ApiServiceImpl implements ApiService {
     }
 
 
-
     //        ********** JSON 일부분 parsing **************
 //    public List<String> preParseJson(String resultCallString, String service) throws Exception {
 //        try {
@@ -194,3 +258,4 @@ public class ApiServiceImpl implements ApiService {
 //    }
 
 }
+

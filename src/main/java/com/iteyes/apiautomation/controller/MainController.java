@@ -9,11 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
+
+/**
+ * @author eunju Kang
+ */
 @Controller
 @Log4j2
 public class MainController {
@@ -21,6 +24,11 @@ public class MainController {
     @Autowired
     private ApiService apiService;
 
+    /**
+     * 첫 화면 Api 목록
+     * @param model api 이름 목록을 화면에 전달
+     * @return main 첫 화면 html
+     */
     @GetMapping("/apiList")
     public String list(Model model) {
         List<ApiManagerDTO> apiList = apiService.getApiList();
@@ -28,13 +36,30 @@ public class MainController {
         return "main";
     }
 
+    /**
+     * api의 요청 변수 목록
+     * @param apiId 첫 화면에서 선택한 api의 Id값 전달
+     * @param model 요청 변수 목록을 화면에 전달
+     * @return apiRequest
+     */
     @GetMapping("/parameterList")
     public String apiCallRequest(@RequestParam("apiId") String apiId, Model model) {
         List<ParameterManagerDTO> parameterList = apiService.getParameterList(apiId);
         model.addAttribute("parameterList", parameterList);
         model.addAttribute("apiId", apiId);
-        log.info(parameterList);
         return "apiRequest";
+    }
+
+    @PostMapping("/preview")
+    public String previewRequest(@RequestParam(value = "parameterValue", required = true) List<String> parameterValue,
+                                 @RequestParam(value = "apiId") String apiId, Model model) throws Exception {
+
+        List<String> previewList = apiService.previewJson(apiId, parameterValue);
+        model.addAttribute("resultCode", previewList.get(0));
+        model.addAttribute("resultMessage", previewList.get(1));
+
+        log.info(previewList.toString());
+        return "preview";
     }
 
     @PostMapping("/apiSaveResult")
@@ -44,13 +69,13 @@ public class MainController {
         try {
             String message = apiService.saveJson(apiId, parameterValue);
             model.addAttribute("resultMessage", message);
-            log.info("====================적재 성공=========================");
         } catch (Exception e) {
             model.addAttribute("resultMessage", e.getMessage());
-            log.info("====================적재 fail=========================");
         }
 
         return "apiSaveResult";
     }
+
+
 
 }

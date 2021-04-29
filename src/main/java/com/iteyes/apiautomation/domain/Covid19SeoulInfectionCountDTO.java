@@ -36,7 +36,6 @@ public class Covid19SeoulInfectionCountDTO {
     private String JGK_CONT_GS;
     private String JGK_CONT_GH;
     private String CHECKING;
-
     @Builder
     public Covid19SeoulInfectionCount toEntity() {
         return Covid19SeoulInfectionCount.builder()
